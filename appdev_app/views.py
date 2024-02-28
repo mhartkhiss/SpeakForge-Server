@@ -69,6 +69,11 @@ def translate(request):
         return Response({'error': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
 
+@api_view(['GET'])   
+def get_supported_languages(request):
+    # Extract the language codes and names from the LANGUAGES dictionary
+    languages = [{'code': code, 'name': name} for code, name in LANGUAGES.items()]
+    return Response({'languages': languages})
 
 
 # render template for testing
