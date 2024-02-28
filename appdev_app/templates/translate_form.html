@@ -1,0 +1,43 @@
+<!-- translate_form.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translate Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Translate Form</h1>
+    <form id="translate-form">
+        {% csrf_token %}
+        <label for="text">Text:</label><br>
+        <textarea id="text" name="text" rows="4" cols="50"></textarea><br>
+        <label for="target-language">Target Language:</label><br>
+        <input type="text" id="target-language" name="target_language"><br><br>
+        <button type="submit">Translate</button>
+    </form>
+    <div id="translated-text"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#translate-form').submit(function(event) {
+                event.preventDefault();  // Prevent form submission
+                var formData = $(this).serialize();  // Serialize form data
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/translate/',
+                    data: formData,
+                    success: function(response) {
+                        $('#translated-text').text('Translated Text: ' + response.translated_text);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        $('#translated-text').text('Error: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
